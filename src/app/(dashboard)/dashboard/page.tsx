@@ -23,11 +23,18 @@ const page = async ({}) => {
         -1
       )) as string[]
 
-      const lastMessage = JSON.parse(lastMessageRaw) as Message
+      let lastMessage: Message | null = null
+      if (lastMessageRaw) {
+        try {
+          lastMessage = JSON.parse(lastMessageRaw) as Message
+        } catch (error) {
+          console.error("Error parsing lastMessageRaw:", error)
+        }
+      }
 
       return {
         ...friend,
-        lastMessage,
+        lastMessage: lastMessage || { text: '', senderId: '' }, // Provide default values if needed
       }
     })
   )
